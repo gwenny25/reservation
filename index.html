@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Facility Reservation System | Portal</title>
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+  <div class="center-panel">
+    <div style="max-width: 900px; width: 100%">
+      <div class="panel" style="max-width:100%; margin-bottom:18px">
+        <h1>Facility Reservation &amp; Service Request Management System</h1>
+        <p class="sub">Laboratory 4 &ndash; Section B &middot; Role-Based Facility Reservation and Approval System</p>
+        <p style="font-size:.9rem">
+          Roles: <span class="badge badge-role">Administrator</span>
+          <span class="badge badge-role">Facility Staff</span>
+          <span class="badge badge-role">Requester</span>
+        </p>
+        <div style="display:flex; gap:10px; margin-top:20px; flex-wrap:wrap">
+          <a class="btn btn-primary" href="login.html">Sign in</a>
+          <a class="btn" href="tests.html">Run function tests</a>
+        </div>
+      </div>
+
+      <div class="grid cols-2">
+        <div class="card">
+          <h3>Reservation workflow</h3>
+          <p class="muted" style="font-size:.85rem">
+            Submitted &rarr; Pending &rarr; Approved / Rejected &rarr; (Approved) Scheduled &rarr;
+            In Use &rarr; Completed &middot; Cancel at any eligible stage.
+          </p>
+          <p class="muted" style="font-size:.82rem; margin-top:6px">
+            Statuses enforced: <strong>Pending, Approved, Rejected, Scheduled, In Use, Completed, Cancelled</strong>.
+          </p>
+        </div>
+        <div class="card">
+          <h3>Demo accounts (created after Supabase setup)</h3>
+          <table class="table" style="font-size:.8rem">
+            <tr><th>Email</th><th>Role</th></tr>
+            <tr><td>admin@campus.edu</td><td>Administrator</td></tr>
+            <tr><td>staff@campus.edu</td><td>Facility Staff</td></tr>
+            <tr><td>requester@campus.edu</td><td>Requester</td></tr>
+            <tr><td>requester2@campus.edu</td><td>Requester</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

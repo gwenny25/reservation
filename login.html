@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign in | Facility Reservation System</title>
+  <link rel="stylesheet" href="assets/css/styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/supabase.js"></script>
+  <script src="assets/js/auth.js"></script>
+  <script src="assets/js/ui.js"></script>
+</head>
+<body>
+  <div class="center-panel">
+    <div class="panel">
+      <h1>Facility Reservation System</h1>
+      <p class="sub">Sign in to continue. The first account you register becomes the <strong>Administrator</strong>.</p>
+
+      <div id="deny-box" class="alert" style="display:none">
+        Access denied: protected pages require a session. Please sign in.
+      </div>
+      <div id="err-box" class="alert" style="display:none"></div>
+
+      <form id="login-form" autocomplete="on">
+        <label class="field">Email
+          <input type="email" id="email" required placeholder="you@campus.edu" />
+        </label>
+        <label class="field">Password
+          <input type="password" id="password" required placeholder="••••••••" />
+        </label>
+        <div class="form-actions">
+          <button type="button" id="btn-signup" class="btn">Register</button>
+          <button type="submit" class="btn btn-primary">Sign in</button>
+        </div>
+      </form>
+
+      <div class="divider"><span>or use a demo account</span></div>
+      <div class="quick-accounts">
+        <button class="btn" data-a="admin@campus.edu">Administrator &middot; admin@campus.edu</button>
+        <button class="btn" data-a="staff@campus.edu">Facility Staff &middot; staff@campus.edu</button>
+        <button class="btn" data-a="requester@campus.edu">Requester &middot; requester@campus.edu</button>
+        <button class="btn" data-a="requester2@campus.edu">Requester 2 &middot; requester2@campus.edu</button>
+      </div>
+      <p class="muted" style="font-size:.76rem; margin-top:14px">
+        Setup, schema and demo accounts: see <code>README.md</code> and <code>supabase/schema.sql</code>.
+      </p>
+    </div>
+  </div>
+
+  <script src="assets/js/pages/login.js"></script>
+</body>
+</html>

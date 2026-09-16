@@ -1,0 +1,9 @@
+node_modules/
+dist/
+*.log
+.DS_Store
+Thumbs.db
+.vscode/
+
+# local Supabase credentials - never commit real keys
+assets/js/config.js

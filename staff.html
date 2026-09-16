@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Facility Staff | Facility Reservation System</title>
+  <link rel="stylesheet" href="assets/css/styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/supabase.js"></script>
+  <script src="assets/js/auth.js"></script>
+  <script src="assets/js/ui.js"></script>
+  <script src="assets/js/api.js"></script>
+</head>
+<body>
+  <header id="app-header"></header>
+
+  <main class="wrap">
+    <div class="page-head">
+      <div>
+        <div class="page-title">Facility Staff Dashboard</div>
+        <div class="page-sub">View reservations &middot; confirm usage &middot; record completion &middot; service requests &middot; facility condition</div>
+      </div>
+      <div class="row-actions">
+        <button class="btn" onclick="FRS.staff.openService()">+ New service request</button>
+        <button class="btn" onclick="FRS.staff.openCondition()">Update facility condition</button>
+      </div>
+    </div>
+
+    <div class="grid cols-3" style="margin-bottom:18px">
+      <div class="stat"><div class="stat-num" id="st-scheduled">0</div><div class="stat-label">Scheduled today</div></div>
+      <div class="stat"><div class="stat-num" id="st-inuse">0</div><div class="stat-label">In use now</div></div>
+      <div class="stat"><div class="stat-num" id="st-open-sr">0</div><div class="stat-label">Open service requests</div></div>
+    </div>
+
+    <section class="card" style="margin-bottom:18px">
+      <div class="card-title-row"><h3>Upcoming &amp; active reservations</h3></div>
+      <div class="table-wrap">
+        <table class="table" id="upcoming-table">
+          <thead>
+            <tr><th>Title</th><th>Facility</th><th>Requester</th><th>Start</th><th>End</th><th>Status</th><th>Actions</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card" style="margin-bottom:18px">
+      <div class="card-title-row"><h3>Facility service requests</h3></div>
+      <div class="table-wrap">
+        <table class="table" id="sr-table">
+          <thead>
+            <tr><th>Title</th><th>Facility</th><th>Priority</th><th>Status</th><th>Reported</th><th>Actions</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-title-row"><h3>Facilities &amp; condition</h3></div>
+      <div class="table-wrap">
+        <table class="table" id="facility-table">
+          <thead>
+            <tr><th>Facility</th><th>Location</th><th>Status</th><th>Condition</th><th>Actions</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <!-- service request modal -->
+  <div class="modal" id="modal-service">
+    <div class="modal-card">
+      <h3>New service request</h3>
+      <form id="service-form">
+        <label class="field">Facility <select id="sv-facility" required></select></label>
+        <label class="field">Title <input type="text" id="sv-title" required maxlength="120" /></label>
+        <label class="field">Priority
+          <select id="sv-priority"><option>Low</option><option selected>Normal</option><option>High</option><option>Urgent</option></select>
+        </label>
+        <label class="field">Description <textarea id="sv-desc" rows="3"></textarea></label>
+        <div class="modal-actions">
+          <button type="button" class="btn" onclick="FRS.ui.closeModal('modal-service')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Create request</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- condition modal -->
+  <div class="modal" id="modal-condition">
+    <div class="modal-card">
+      <h3>Update facility condition</h3>
+      <form id="condition-form">
+        <label class="field">Facility <select id="co-facility" required></select></label>
+        <label class="field">Condition
+          <select id="co-condition">
+            <option>Good</option><option>Fair</option><option>Poor</option><option>Under Maintenance</option>
+          </select>
+        </label>
+        <p class="muted" style="font-size:.78rem">
+          Setting a facility to <strong>Under Maintenance</strong> also flips its status to
+          <strong>Maintenance</strong>, which blocks new reservations (BR-B4-08).
+        </p>
+        <div class="modal-actions">
+          <button type="button" class="btn" onclick="FRS.ui.closeModal('modal-condition')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save condition</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="toast-box"></div>
+  <div id="confirm-host"></div>
+  <script src="assets/js/pages/staff.js"></script>
+</body>
+</html>

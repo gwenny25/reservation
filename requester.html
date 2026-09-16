@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Requester | Facility Reservation System</title>
+  <link rel="stylesheet" href="assets/css/styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/supabase.js"></script>
+  <script src="assets/js/auth.js"></script>
+  <script src="assets/js/ui.js"></script>
+  <script src="assets/js/api.js"></script>
+</head>
+<body>
+  <header id="app-header"></header>
+
+  <main class="wrap">
+    <div class="page-head">
+      <div>
+        <div class="page-title">Requester Dashboard</div>
+        <div class="page-sub">Browse facilities &middot; submit reservation requests &middot; track status &middot; cancel eligible own requests</div>
+      </div>
+      <button class="btn btn-primary" onclick="FRS.requester.openSubmit()">+ New reservation request</button>
+    </div>
+
+    <section class="card" style="margin-bottom:18px">
+      <div class="card-title-row"><h3>Available facilities</h3></div>
+      <div class="grid cols-3" id="facility-grid"></div>
+    </section>
+
+    <section class="card">
+      <div class="card-title-row"><h3>My reservations &amp; history</h3></div>
+      <div class="table-wrap">
+        <table class="table" id="my-reservations">
+          <thead>
+            <tr><th>Title</th><th>Facility</th><th>Start</th><th>End</th><th>Status</th><th>Actions</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <!-- submit modal -->
+  <div class="modal" id="modal-submit">
+    <div class="modal-card">
+      <h3>New reservation request</h3>
+      <form id="submit-form">
+        <label class="field">Facility
+          <select id="s-facility" required></select>
+        </label>
+        <label class="field">Title / purpose
+          <input type="text" id="s-title" required maxlength="120" placeholder="e.g. Class seminar" />
+        </label>
+        <div class="form-row">
+          <label class="field">Start
+            <input type="datetime-local" id="s-start" required />
+          </label>
+          <label class="field">End
+            <input type="datetime-local" id="s-end" required />
+          </label>
+        </div>
+        <label class="field">Notes
+          <textarea id="s-notes" rows="2"></textarea>
+        </label>
+        <div class="modal-actions">
+          <button type="button" class="btn" onclick="FRS.ui.closeModal('modal-submit')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Submit request</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- edit modal -->
+  <div class="modal" id="modal-edit">
+    <div class="modal-card">
+      <h3>Edit my pending request</h3>
+      <form id="edit-form">
+        <input type="hidden" id="e-id" />
+        <label class="field">Title / purpose
+          <input type="text" id="e-title" required maxlength="120" />
+        </label>
+        <div class="form-row">
+          <label class="field">Start
+            <input type="datetime-local" id="e-start" required />
+          </label>
+          <label class="field">End
+            <input type="datetime-local" id="e-end" required />
+          </label>
+        </div>
+        <label class="field">Notes <textarea id="e-notes" rows="2"></textarea></label>
+        <div class="modal-actions">
+          <button type="button" class="btn" onclick="FRS.ui.closeModal('modal-edit')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="toast-box"></div>
+  <div id="confirm-host"></div>
+  <script src="assets/js/pages/requester.js"></script>
+</body>
+</html>

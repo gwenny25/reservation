@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Administrator | Facility Reservation System</title>
+  <link rel="stylesheet" href="assets/css/styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/supabase.js"></script>
+  <script src="assets/js/auth.js"></script>
+  <script src="assets/js/ui.js"></script>
+  <script src="assets/js/api.js"></script>
+</head>
+<body>
+  <header id="app-header"></header>
+
+  <main class="wrap">
+    <div class="page-head">
+      <div>
+        <div class="page-title">Administrator Dashboard</div>
+        <div class="page-sub">Manage facilities and users &middot; approve/reject reservations &middot; service concerns &middot; reports &middot; audit logs</div>
+      </div>
+      <button class="btn btn-primary" onclick="FRS.admin.openFacility()">+ New facility</button>
+    </div>
+
+    <div class="grid cols-4" style="margin-bottom:18px">
+      <div class="stat"><div class="stat-num" id="st-pending">0</div><div class="stat-label">Pending approval</div></div>
+      <div class="stat"><div class="stat-num" id="st-active-fac">0</div><div class="stat-label">Active facilities</div></div>
+      <div class="stat"><div class="stat-num" id="st-scheduled">0</div><div class="stat-label">Scheduled</div></div>
+      <div class="stat"><div class="stat-num" id="st-requests">0</div><div class="stat-label">Open service requests</div></div>
+    </div>
+
+    <!-- APPROVAL QUEUE -->
+    <section class="card" style="margin-bottom:18px">
+      <div class="card-title-row"><h3>Reservation approval queue</h3></div>
+      <div class="table-wrap">
+        <table class="table" id="approval-table">
+          <thead>
+            <tr><th>Title</th><th>Facility</th><th>Requester</th><th>Start</th><th>End</th><th>Actions</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ALL RESERVATIONS -->
+    <section class="card" style="margin-bottom:18px">
+      <div class="card-title-row"><h3>All reservations</h3></div>
+      <div class="table-wrap">
+        <table class="table" id="all-reservations">
+          <thead>
+            <tr><th>Title</th><th>Facility</th><th>Requester</th><th>Start</th><th>End</th><th>Status</th><th>Actions</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- FACILITIES -->
+    <section class="card" style="margin-bottom:18px">
+      <div class="card-title-row"><h3>Facilities</h3></div>
+      <div class="table-wrap">
+        <table class="table" id="admin-facilities">
+          <thead>
+            <tr><th>Name</th><th>Location</th><th>Capacity</th><th>Status</th><th>Condition</th><th>Actions</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SERVICE CONCERNS -->
+    <section class="card" style="margin-bottom:18px">
+      <div class="card-title-row"><h3>Service concerns</h3></div>
+      <div class="table-wrap">
+        <table class="table" id="admin-svc">
+          <thead>
+            <tr><th>Title</th><th>Facility</th><th>Reported by</th><th>Priority</th><th>Status</th><th>Reported</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- USERS -->
+    <section class="card" style="margin-bottom:18px">
+      <div class="card-title-row"><h3>Users &amp; roles</h3></div>
+      <div class="table-wrap">
+        <table class="table" id="admin-users">
+          <thead>
+            <tr><th>User</th><th>Email</th><th>Role</th><th>Actions</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- REPORTS -->
+    <section class="card" style="margin-bottom:18px">
+      <div class="card-title-row">
+        <h3>Reports</h3>
+        <button class="btn btn-sm" onclick="FRS.admin.refresh()">Refresh all</button>
+      </div>
+      <div class="table-wrap">
+        <table class="table" id="reports-table">
+          <thead><tr><th>Indicator</th><th>Value</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- AUDIT LOGS -->
+    <section class="card">
+      <div class="card-title-row">
+        <h3>Audit log (BR-B4-10)</h3>
+        <span class="muted" style="font-size:.78rem">Approval, rejection, cancellation, status changes, facility and user updates are all recorded.</span>
+      </div>
+      <div class="table-wrap" style="max-height:420px; overflow:auto">
+        <table class="table" id="audit-table">
+          <thead>
+            <tr><th>When</th><th>Actor</th><th>Role</th><th>Action</th><th>Entity</th><th>Details</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <!-- facility modal -->
+  <div class="modal" id="modal-facility">
+    <div class="modal-card">
+      <h3 id="facility-modal-title">New facility</h3>
+      <form id="facility-form">
+        <input type="hidden" id="f-id" />
+        <label class="field">Name <input type="text" id="f-name" required maxlength="120" /></label>
+        <label class="field">Location <input type="text" id="f-location" /></label>
+        <div class="form-row">
+          <label class="field">Capacity <input type="number" id="f-capacity" min="1" placeholder="persons" /></label>
+          <label class="field">Status
+            <select id="f-status"><option>Active</option><option>Maintenance</option><option>Inactive</option></select>
+          </label>
+        </div>
+        <label class="field">Description <textarea id="f-description" rows="2"></textarea></label>
+        <div class="modal-actions">
+          <button type="button" class="btn" onclick="FRS.ui.closeModal('modal-facility')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save facility</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- reject modal -->
+  <div class="modal" id="modal-reject">
+    <div class="modal-card modal-sm">
+      <h3>Reject reservation</h3>
+      <p class="muted" style="font-size:.84rem">Provide a reason. The requester will see it, and the action is logged.</p>
+      <form id="reject-form">
+        <input type="hidden" id="r-id" />
+        <label class="field">Reason <textarea id="r-reason" rows="3" required></textarea></label>
+        <div class="modal-actions">
+          <button type="button" class="btn" onclick="FRS.ui.closeModal('modal-reject')">Cancel</button>
+          <button type="submit" class="btn btn-danger">Reject request</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="toast-box"></div>
+  <div id="confirm-host"></div>
+  <script src="assets/js/pages/admin.js"></script>
+</body>
+</html>
