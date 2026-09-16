@@ -792,7 +792,7 @@ begin
     new.id,
     new.email,
     coalesce(new.raw_user_meta_data ->> 'full_name', split_part(new.email, '@', 1)),
-    case when v_count = 0 then 'administrator' else 'requester' end
+    case when v_count = 0 then 'administrator'::public.app_role else 'requester'::public.app_role end
   );
   return new;
 end;
